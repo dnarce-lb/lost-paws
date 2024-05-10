@@ -2,23 +2,14 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import LogoIcon from '../assets/icons/logo.svg';
-import { BurguerMenu } from '@/assets/icons';
 import { TeamWork } from '@/assets/images';
+import Header from '@/components/Header';
+import Layout from '@/components/Layout';
 
 export default function Home() {
   return (
-    <div className='flex flex-col bg-mainGray px-6 py-5 gap-5'>
-      <div className='bg-white rounded-full flex justify-between items-center h-20 px-6'>
-        <div className='flex  items-center text-mainBlue'>
-          <Image src={LogoIcon} width={182} height={22} alt='logo' />
-        </div>
-        <div>
-          <div className='bg-mainGray h-12 w-12 flex items-center justify-center rounded-full'>
-            <Image src={BurguerMenu} width={17.5} height={11.5} alt='logo' />
-          </div>
-        </div>
-      </div>
+    <Layout>
+      <Header />
       <div className='bg-white flex flex-col rounded-3xl py-12 px-8'>
         <div className=' flex items-center text-center'>
           <span className='text-mainBlack text-3xl font-semibold'>¡Te ayudamos a encontrar a tu mejor amigo!</span>
@@ -32,12 +23,12 @@ export default function Home() {
           <Image src={TeamWork} width={267} alt='' />
         </div>
         <div className='mt-8'>
-          <Link href='/perdidas'>
+          <Link href='/reportar/perdida'>
             <button type='button' className='bg-mainBlue text-white rounded-full h-12 w-full'>
               Perdí a mi mascota
             </button>
           </Link>
-          <Link href='/encontradas'>
+          <Link href='/reportar/encontrada'>
             <button
               type='button'
               className='bg-white text-mainBlue rounded-full h-12 w-full mt-4 border border-mainBlue'>
@@ -46,6 +37,6 @@ export default function Home() {
           </Link>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 }
