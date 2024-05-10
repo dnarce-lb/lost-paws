@@ -12,6 +12,8 @@
     "lint:fix": "eslint --fix ."
   },
   "dependencies": {
+    "@supabase/ssr": "^0.3.0",
+    "@supabase/supabase-js": "^2.43.1",
     "@types/common-tags": "^1.8.4",
     "common-tags": "^1.8.2",
     "eslint-config-custom": "*",
