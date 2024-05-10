@@ -1,18 +1,14 @@
 import openai from '@/app/utils/openai';
 import { PET_DESCRIPTION_PROMPT } from './prompts';
 
-interface Pet {
-  pictures: string[];
-}
-
-const getPetDescription = async (pet: Pet) => {
+const getPetDescription = async (pictures: string[]) => {
   const completion = await openai.chat.completions.create({
     model: 'gpt-4-turbo',
     messages: [
       { role: 'system', content: PET_DESCRIPTION_PROMPT },
       {
         role: 'user',
-        content: pet.pictures.map(url => ({
+        content: pictures.map(url => ({
           type: 'image_url',
           image_url: {
             url,
