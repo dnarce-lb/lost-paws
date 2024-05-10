@@ -49,10 +49,10 @@ export interface DatabaseReport {
   lat?: number;
   lng?: number;
   formatted_address?: string;
-  animal?: DatabaseAnimal;
-  gender?: DatabaseGender;
-  breed?: DatabaseBreed;
-  size?: DatabaseSize;
+  animals?: DatabaseAnimal;
+  genders?: DatabaseGender;
+  breeds?: DatabaseBreed;
+  sizes?: DatabaseSize;
   age?: string;
   color?: string;
   description?: string;
@@ -70,10 +70,10 @@ const transformToReport = (reportData: DatabaseReport): Report => {
     lat: reportData.lat,
     lng: reportData.lng,
     formattedAddress: reportData.formatted_address,
-    animal: reportData.animal,
-    gender: reportData.gender,
-    breed: reportData.breed,
-    size: reportData.size,
+    animal: reportData.animals,
+    gender: reportData.genders,
+    breed: reportData.breeds,
+    size: reportData.sizes,
     color: reportData.color,
     description: reportData.description,
     type: reportData.type,
@@ -128,7 +128,8 @@ export const updateReport = async (id: number, reportUpdate: Partial<Report>) =>
       name: reportUpdate.name,
       type: reportUpdate.type,
     })
-    .eq('id', id);
+    .eq('id', id)
+    .select('*, animals(id, name), genders(id, name), breeds(id, name), sizes(id, name)');
 
   if (error) throw new Error('Error on updating report');
 
@@ -136,7 +137,9 @@ export const updateReport = async (id: number, reportUpdate: Partial<Report>) =>
 };
 
 export const getAllReports = async () => {
-  const { data, error } = await supabase.from('reports').select();
+  const { data, error } = await supabase
+    .from('reports')
+    .select('*, animals(id, name), genders(id, name), breeds(id, name), sizes(id, name)');
 
   if (error) throw new Error('Error on fetching reports');
 
@@ -144,7 +147,10 @@ export const getAllReports = async () => {
 };
 
 export const getReportById = async (id: number) => {
-  const { data, error } = await supabase.from('reports').select().eq('id', id);
+  const { data, error } = await supabase
+    .from('reports')
+    .select('*, animals(id, name), genders(id, name), breeds(id, name), sizes(id, name)')
+    .eq('id', id);
 
   if (error) throw new Error('Error on fetching report');
 
