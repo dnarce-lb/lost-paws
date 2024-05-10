@@ -1,0 +1,27 @@
+{
+  "name": "@my-app/front",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint --max-warnings=0 . ",
+    "prelint": "tsc --noEmit",
+    "prelint:fix": "tsc --noEmit && prettier --write .",
+    "lint:fix": "eslint --fix ."
+  },
+  "dependencies": {
+    "eslint-config-custom": "*",
+    "next": "14.2.3",
+    "next-secure-headers": "^2.2.0",
+    "react": "^18",
+    "react-dom": "^18"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "typescript": "^5"
+  }
+}
