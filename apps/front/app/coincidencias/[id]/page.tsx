@@ -41,13 +41,15 @@ const Coincidencias: React.FC<Props> = async ({ params: { id } }) => {
                   <div key={match.id} className='bg-mainGray p-4 rounded-3xl'>
                     <div className='relative '>
                       <Image src={pictureUrl1 || ''} alt='' width={500} height={500} className='rounded-3xl' />
-                      <div
-                        className='absolute text-white text-4xl bottom-[10px] right-[10px] z-10'
-                        style={{
-                          textShadow: '1px 1px 2px black',
-                        }}>
-                        +{moreImagesAmount}
-                      </div>
+                      {moreImagesAmount > 0 && (
+                        <div
+                          className='absolute text-white text-4xl bottom-[10px] right-[10px] z-10'
+                          style={{
+                            textShadow: '1px 1px 2px black',
+                          }}>
+                          +{moreImagesAmount}
+                        </div>
+                      )}
                     </div>
                     <div className='mt-6'>
                       <div className='flex justify-between'>

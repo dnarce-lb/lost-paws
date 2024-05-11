@@ -22,7 +22,6 @@ export interface Report {
   date?: Date;
 }
 
-
 export interface DatabaseReport {
   id: number;
   picture_url1?: string;
@@ -31,10 +30,10 @@ export interface DatabaseReport {
   lat?: number;
   lng?: number;
   formatted_address?: string;
-  animals?: string;
-  genders?: string;
-  breeds?: string;
-  sizes?: string;
+  animal?: string;
+  gender?: string;
+  breed?: string;
+  size?: string;
   age?: string;
   color?: string;
   description?: string;
@@ -52,10 +51,10 @@ const transformToReport = (reportData: DatabaseReport): Report => {
     lat: reportData.lat,
     lng: reportData.lng,
     formattedAddress: reportData.formatted_address,
-    animal: reportData.animals,
-    gender: reportData.genders,
-    breed: reportData.breeds,
-    size: reportData.sizes,
+    animal: reportData.animal,
+    gender: reportData.gender,
+    breed: reportData.breed,
+    size: reportData.size,
     color: reportData.color,
     description: reportData.description,
     type: reportData.type,
@@ -77,9 +76,11 @@ export const createReport = async (report: Report) => {
         formatted_address: report.formattedAddress,
         animal: report.animal,
         gender: report.gender,
+        color: report.color,
         breed: report.breed,
         size: report.size,
         age: report.age,
+        date: report.date,
         description: report.description,
         name: report.name,
         type: report.type,
@@ -87,7 +88,10 @@ export const createReport = async (report: Report) => {
     ])
     .select();
 
-  if (error) {console.log(error); throw new Error('Error on creating report');}
+  if (error) {
+    console.log(error);
+    throw new Error('Error on creating report');
+  }
 
   return data;
 };
@@ -112,7 +116,7 @@ export const updateReport = async (id: number, reportUpdate: Partial<Report>) =>
       type: reportUpdate.type,
     })
     .eq('id', id)
-    .select('*, animals(id, name), genders(id, name), breeds(id, name), sizes(id, name)');
+    .select('*');
 
   if (error) throw new Error('Error on updating report');
 
@@ -120,9 +124,7 @@ export const updateReport = async (id: number, reportUpdate: Partial<Report>) =>
 };
 
 export const getAllReports = async () => {
-  const { data, error } = await supabase
-    .from('reports')
-    .select('*, animals(id, name), genders(id, name), breeds(id, name), sizes(id, name)');
+  const { data, error } = await supabase.from('reports').select('*');
 
   if (error) throw new Error('Error on fetching reports');
 
@@ -130,10 +132,8 @@ export const getAllReports = async () => {
 };
 
 export const getReportById = async (id: number) => {
-  const { data, error } = await supabase
-    .from('reports')
-    .select('*, animals(id, name), genders(id, name), breeds(id, name), sizes(id, name)')
-    .eq('id', id);
+  const { data, error } = await supabase.from('reports').select('*').eq('id', id);
+  console.log("🚀 ~ getReportById ~ data:", data)
 
   if (error || !data) throw new Error('Error on fetching report');
 
@@ -142,27 +142,23 @@ export const getReportById = async (id: number) => {
 
 export const getMatchingReports = async (id: number) => {
   try {
-    const { data: report, error } = await supabase
-      .from('reports')
-      .select('*, animals(id, name), genders(id, name), breeds(id, name), sizes(id, name)')
-      .eq('id', id)
-      .single();
+    const { data: report, error } = await supabase.from('reports').select('*').eq('id', id).single();
 
     if (error) throw new Error('Error on fetching report');
 
     const { data: matchingReports, error: matchingError } = await supabase
       .from('reports')
-      .select('*, animals(id, name), genders(id, name), breeds(id, name), sizes(id, name)')
-      .eq('animal_id', report.animal_id)
+      .select('*')
+      .eq('animal', report.animal)
       .eq('type', report.type === 'lost' ? 'found' : 'lost');
 
     if (matchingError) throw new Error('Error on fetching matching reports');
 
     const filteredReports = matchingReports.filter(
       matchingReport =>
-        (!report.gender_id || matchingReport.gender_id === report.gender_id || matchingReport.gender_id === null) &&
-        (!report.breed_id || matchingReport.breed_id === report.breed_id || matchingReport.breed_id === null) &&
-        (!report.size_id || matchingReport.size_id === report.size_id || matchingReport.size_id === null) &&
+        (!report.gender || matchingReport.gender === report.gender || matchingReport.gender === null) &&
+        (!report.breed || matchingReport.breed === report.breed || matchingReport.breed === null) &&
+        (!report.size || matchingReport.size === report.size || matchingReport.size === null) &&
         (!report.age || matchingReport.age === report.age || matchingReport.age === null)
     );
 
