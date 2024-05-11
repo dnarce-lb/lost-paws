@@ -1,6 +1,6 @@
 import supabase from '../utils/supabase/client';
 
-type ReportType = 'lost' | 'found';
+export type ReportType = 'lost' | 'found';
 
 export interface Report {
   id: number;

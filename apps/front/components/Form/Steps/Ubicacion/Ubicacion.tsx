@@ -1,5 +1,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
+'use client';
+
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import useLocation from '@/hooks/useLocation';
@@ -8,9 +10,11 @@ import { ArrowDown, ArrowLeft, Pin } from '@/assets/icons';
 type Props = {
   onHideStepperLabels?: (params: boolean) => void;
   onNextStepAvailable: (params: boolean) => void;
+  context: any;
 };
 
-const UbicacionStep: React.FC<Props> = ({ onHideStepperLabels, onNextStepAvailable }) => {
+const UbicacionStep: React.FC<Props> = ({ onHideStepperLabels, onNextStepAvailable, context }) => {
+  const { handleMultipleChange } = context;
   const [isShowingLocations, setisShowingLocations] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState('');
   const { getMyLocation, addreesses, setFormattedAddress, formattedAddress, loading, selectedPlace, selectPlace } =
@@ -18,6 +22,12 @@ const UbicacionStep: React.FC<Props> = ({ onHideStepperLabels, onNextStepAvailab
 
   useEffect(() => {
     if (selectedPlace !== null) {
+      console.log('🚀 ~ useEffect ~ selectedPlace:', selectedPlace);
+      handleMultipleChange({
+        formattedAddress: selectedPlace.formattedAddress,
+        lat: selectedPlace.lat,
+        lng: selectedPlace.lng,
+      });
       onNextStepAvailable(true);
     }
   }, [onNextStepAvailable, selectedPlace]);
