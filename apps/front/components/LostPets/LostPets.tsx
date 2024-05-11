@@ -47,8 +47,6 @@ const PetCard = ({ name, imageUrl, formattedAddress, date }: PetCardProps) => {
 export const LostPets = async () => {
   const reports = await getAllReports();
 
-  console.log(reports);
-
   return (
     <div className='bg-white flex flex-col items-center rounded-3xl p-[30px]'>
       <h2 className='font-semibold text-[18px] leading-[25.2px] text-mainBlack text-center mb-2'>
