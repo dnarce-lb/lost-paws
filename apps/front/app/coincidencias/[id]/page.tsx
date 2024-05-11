@@ -16,8 +16,8 @@ const Coincidencias: React.FC<Props> = async ({ params: { id } }) => {
   const matches = await searchForMatchingReports(Number(id));
 
   const getMoreImagesAmount = (match: any) => {
-    if (match.pictureUrl2) return 1;
     if (match.pictureUrl3) return 2;
+    if (match.pictureUrl2) return 1;
     return 0;
   };
 
