@@ -156,3 +156,35 @@ export const getReportById = async (id: number) => {
 
   return data ? transformToReport(data[0]) : null;
 };
+
+export const getMatchingReports = async (id: number) => {
+  try {
+    const { data: report, error } = await supabase
+      .from('reports')
+      .select('*, animals(id, name), genders(id, name), breeds(id, name), sizes(id, name)')
+      .eq('id', id)
+      .single();
+
+    if (error) throw new Error('Error on fetching report');
+
+    const { data: matchingReports, error: matchingError } = await supabase
+      .from('reports')
+      .select('*, animals(id, name), genders(id, name), breeds(id, name), sizes(id, name)')
+      .eq('animal_id', report.animal_id)
+      .eq('type', report.type === 'lost' ? 'found' : 'lost');
+
+    if (matchingError) throw new Error('Error on fetching matching reports');
+
+    const filteredReports = matchingReports.filter(
+      matchingReport =>
+        (!report.gender_id || matchingReport.gender_id === report.gender_id || matchingReport.gender_id === null) &&
+        (!report.breed_id || matchingReport.breed_id === report.breed_id || matchingReport.breed_id === null) &&
+        (!report.size_id || matchingReport.size_id === report.size_id || matchingReport.size_id === null) &&
+        (!report.age || matchingReport.age === report.age || matchingReport.age === null)
+    );
+
+    return filteredReports.map(transformToReport);
+  } catch (error) {
+    throw new Error('An error occurred while fetching reports');
+  }
+};
