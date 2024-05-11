@@ -1,8 +1,6 @@
 import { getReportById, getMatchingReports, Report } from '@/app/services/reports';
 import getPetComparisonResult from './pet-comparison';
 
-const SCORE_THRESHOLD = 3;
-
 const PICTURE_MATCH_SCORE = {
   HIGH: 3,
   MEDIUM: 1,
@@ -19,8 +17,6 @@ const searchForMatchingReports = async (reportId: number) => {
   const images1 = getPictures(report);
 
   const picturesMatchingScores: Record<number, number> = {};
-  const bestResults: Report[] = [];
-  const otherResults: Report[] = [];
 
   await Promise.all(
     coincidences.map(async coincidence => {
@@ -42,20 +38,11 @@ const searchForMatchingReports = async (reportId: number) => {
       if (report.size && report.size === coincidence.size) {
         picturesMatchingScores[coincidence.id] += 0.5;
       }
-
-      if (picturesMatchingScores[coincidence.id] >= SCORE_THRESHOLD) {
-        bestResults.push(coincidence);
-      } else {
-        otherResults.push(coincidence);
-      }
     })
   );
 
   // Sort in descending order
-  return {
-    bestResults: bestResults.sort((a, b) => picturesMatchingScores[b.id] - picturesMatchingScores[a.id]),
-    otherResults: otherResults.sort((a, b) => picturesMatchingScores[b.id] - picturesMatchingScores[a.id]),
-  };
+  return coincidences.sort((a, b) => picturesMatchingScores[b.id] - picturesMatchingScores[a.id]).slice(0, 3);
 };
 
 export default searchForMatchingReports;
