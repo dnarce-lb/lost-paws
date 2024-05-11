@@ -1,9 +1,9 @@
 import supabase from '../utils/supabase/client';
 
-type ReportType = 'lost' | 'found';
+export type ReportType = 'lost' | 'found';
 
 export interface Report {
-  id?: number;
+  id: number;
   pictureUrl1?: string;
   pictureUrl2?: string;
   pictureUrl3?: string;
@@ -42,7 +42,7 @@ export interface DatabaseSize {
 }
 
 export interface DatabaseReport {
-  id?: number;
+  id: number;
   picture_url1?: string;
   picture_url2?: string;
   picture_url3?: string;
@@ -78,6 +78,7 @@ const transformToReport = (reportData: DatabaseReport): Report => {
     description: reportData.description,
     type: reportData.type,
     date: reportData.date,
+    name: reportData.name,
   };
 };
 
@@ -152,9 +153,9 @@ export const getReportById = async (id: number) => {
     .select('*, animals(id, name), genders(id, name), breeds(id, name), sizes(id, name)')
     .eq('id', id);
 
-  if (error) throw new Error('Error on fetching report');
+  if (error || !data) throw new Error('Error on fetching report');
 
-  return data ? transformToReport(data[0]) : null;
+  return transformToReport(data[0]);
 };
 
 export const getMatchingReports = async (id: number) => {

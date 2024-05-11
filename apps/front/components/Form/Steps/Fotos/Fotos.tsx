@@ -1,12 +1,14 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
+'use client';
 
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Close, Plus } from '@/assets/icons';
+import { useFormDataContext } from '@/hooks/useFormData';
 
 type Props = {
   onNextStepAvailable: (params: boolean) => void;
-  setFilesToUpload: (params: File[]) => void;
+  context: any;
 };
 
 const MAX_IMAGES_LIMIT = 3;
@@ -26,12 +28,14 @@ const plusIcons = [
   },
 ];
 
-const FotosStep: React.FC<Props> = ({ onNextStepAvailable, setFilesToUpload }) => {
+const FotosStep: React.FC<Props> = ({ onNextStepAvailable, context }) => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const { setFilesToUpload } = context;
 
   useEffect(() => {
+    console.log('🚀 ~ useEffect ~ selectedFiles', selectedFiles);
     setFilesToUpload(selectedFiles);
-  }, [selectedFiles, setFilesToUpload]);
+  }, [selectedFiles]);
 
   const handleFileChange: React.ChangeEventHandler<HTMLInputElement> | undefined = e => {
     const files = Array.from(e.target.files as Iterable<File> | ArrayLike<File>);
