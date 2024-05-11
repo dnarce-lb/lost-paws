@@ -269,9 +269,14 @@ const FotosStep = ({ onNextStepAvailable }: { onNextStepAvailable: (params: bool
     setSelectedFiles(prev => prev.filter(file => file.name !== fileName));
   };
 
+  const handleRemoveAllImages = () => {
+    setSelectedFiles([]);
+    onNextStepAvailable(false);
+  };
+
   const areImagesSelected = selectedFiles.length > 0;
 
-  const isNextStepAvailable = selectedFiles.length === MAX_IMAGES_LIMIT;
+  const isNextStepAvailable = selectedFiles.length > 0;
 
   useEffect(() => {
     if (isNextStepAvailable) {
@@ -299,7 +304,7 @@ const FotosStep = ({ onNextStepAvailable }: { onNextStepAvailable: (params: bool
           </div>
         </label>
       )}
-      <div className='mt-6 flex gap-2'>
+      <div className='mt-6 flex gap-2 '>
         {selectedFiles.map(file => (
           <div key={file.name} className='relative'>
             <Image
@@ -347,6 +352,13 @@ const FotosStep = ({ onNextStepAvailable }: { onNextStepAvailable: (params: bool
             </div>
           ))}
       </div>
+      {isNextStepAvailable && (
+        <div className='w-full flex justify-end text-white mt-8'>
+          <button className='bg-darkBlue py-2 px-5 rounded-full' type='button' onClick={handleRemoveAllImages}>
+            Eliminar todas
+          </button>
+        </div>
+      )}
     </div>
   );
 };
@@ -368,7 +380,7 @@ const getStepConfifg = ({
 };
 
 const Form: React.FC = () => {
-  const [currentStep, setCurrentStep] = useState<Step>(steps[0]);
+  const [currentStep, setCurrentStep] = useState<Step>(steps[1]);
 
   const [showStepperLabels, setShowStepperLabels] = useState<boolean>(true);
 
