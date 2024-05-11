@@ -15,13 +15,15 @@
     "@supabase/ssr": "^0.3.0",
     "@supabase/supabase-js": "^2.43.1",
     "@types/common-tags": "^1.8.4",
+    "@types/react-lottie": "^1.2.10",
     "common-tags": "^1.8.2",
     "eslint-config-custom": "*",
     "next": "14.2.3",
     "next-secure-headers": "^2.2.0",
     "openai": "^4.44.0",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-lottie": "^1.2.4"
   },
   "devDependencies": {
     "@types/node": "^20",
