@@ -2,15 +2,8 @@
 
 import constate from 'constate';
 import { useEffect, useState } from 'react';
-import {
-  DatabaseAnimal,
-  DatabaseBreed,
-  DatabaseGender,
-  DatabaseSize,
-  Report,
-  ReportType,
-  createReport,
-} from '@/app/services/reports';
+import { Report, ReportType, createReport } from '@/app/services/reports';
+import getPetDescription from '@/app/services/ai-recognition/pet-description';
 
 export type FormData = {
   pictureUrl1?: string;
@@ -19,10 +12,10 @@ export type FormData = {
   lat?: number;
   lng?: number;
   formattedAddress?: string;
-  animal?: DatabaseAnimal;
-  gender?: DatabaseGender;
-  breed?: DatabaseBreed;
-  size?: DatabaseSize;
+  animal?: string;
+  gender?: string;
+  breed?: string;
+  size?: string;
   age?: string;
   color?: string;
   description?: string;
@@ -40,8 +33,9 @@ const useFormData = () => {
     lng: 0,
     date: new Date(),
     formattedAddress: '',
-    animal: { id: 1, name: 'Perro' },
-    gender: { id: 1, name: 'Macho' },
+    age: 'Cachorro',
+    animal: 'Perro',
+    gender: 'Macho',
   });
   const [filesToUpload, setFilesToUpload] = useState<File[]>([]);
 
@@ -82,10 +76,28 @@ const useFormData = () => {
       results.push(resultJson);
     }
 
-    const images = results.map((result, index) => ({ [`pictureUrl${index + 1}`]: result.publicURL }));
+    await processPetImages(results.map((result) => result.publicURL));
+  };
+
+  const processPetImages = async (images: string[]) => {
+    const details = await fetch('/api/openai', {
+      method: 'POST',
+      body: JSON.stringify({ images }),
+    });
+    const detailsJson = await details.json();
+    console.log("🚀 ~ processPetImages ~ detailsJson:", {
+      ...formData,
+      ...detailsJson.description,
+      pictureUrl1: images[0],
+      pictureUrl2: images[1],
+      pictureUrl3: images[2],
+    });
     setFormData({
       ...formData,
-      ...Object.assign({}, ...images),
+      ...detailsJson.description,
+      pictureUrl1: images[0],
+      pictureUrl2: images[1],
+      pictureUrl3: images[2],
     });
   };
 

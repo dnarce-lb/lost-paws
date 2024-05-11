@@ -58,19 +58,19 @@ const ConfirmarStep: React.FC<Props> = ({ context }) => {
       </div>
       <div className='mt-6 flex flex-row items-center justify-between '>
         <div>Tipo:</div>
-        <div>{formData?.animal?.name ?? ' - '}</div>
+        <div>{formData?.animal ?? ' - '}</div>
       </div>
       <div className='mt-6 flex flex-row items-center justify-between '>
         <div>Género:</div>
-        <div>{formData?.gender?.name ?? ' - '}</div>
+        <div>{formData?.gender ?? ' - '}</div>
       </div>
       <div className='mt-6 flex flex-row items-center justify-between '>
         <div>Raza:</div>
-        <div>{formData?.breed?.name ?? ' - '}</div>
+        <div>{formData?.breed ?? ' - '}</div>
       </div>
       <div className='mt-6 flex flex-row items-center justify-between '>
         <div>Tamaño:</div>
-        <div>{formData?.size?.name ?? ' - '}</div>
+        <div>{formData?.size ?? ' - '}</div>
       </div>
       <div className='mt-6 flex flex-row items-center justify-between '>
         <div>Color:</div>
