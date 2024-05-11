@@ -110,6 +110,8 @@ type Props = {
 
 const Form: React.FC<Props> = ({ setShowSearchingForMatches, setShowObtainPetDesc, type }) => {
   const [currentStep, setCurrentStep] = useState<Step>(steps[0]);
+  const [filesToUpload, setFilesToUpload] = useState<File[]>([]);
+  const [uploadedImages, setUploadedImages] = useState<string[]>([]);
   const context = useFormDataContext();
 
   useEffect(() => {
