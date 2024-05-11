@@ -76,7 +76,7 @@ const useFormData = () => {
       results.push(resultJson);
     }
 
-    await processPetImages(results.map((result) => result.publicURL));
+    await processPetImages(results.map(result => result.publicURL));
   };
 
   const processPetImages = async (images: string[]) => {
@@ -85,7 +85,7 @@ const useFormData = () => {
       body: JSON.stringify({ images }),
     });
     const detailsJson = await details.json();
-    console.log("🚀 ~ processPetImages ~ detailsJson:", {
+    console.log('🚀 ~ processPetImages ~ detailsJson:', {
       ...formData,
       ...detailsJson.description,
       pictureUrl1: images[0],

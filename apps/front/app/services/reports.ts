@@ -133,7 +133,7 @@ export const getAllReports = async () => {
 
 export const getReportById = async (id: number) => {
   const { data, error } = await supabase.from('reports').select('*').eq('id', id);
-  console.log("🚀 ~ getReportById ~ data:", data)
+  console.log('🚀 ~ getReportById ~ data:', data);
 
   if (error || !data) throw new Error('Error on fetching report');
 
