@@ -22,7 +22,11 @@ const PerdidasPage: React.FC = () => {
             !showSearchingForMatches && !showObtainPetDesc ? 'flex flex-col bg-mainGray px-6 py-5 gap-5' : 'hidden'
           }>
           <Header />
-          <Form setShowSearchingForMatches={setShowSearchingForMatches} setShowObtainPetDesc={setShowObtainPetDesc} />
+          <Form
+            type='lost'
+            setShowSearchingForMatches={setShowSearchingForMatches}
+            setShowObtainPetDesc={setShowObtainPetDesc}
+          />
         </div>
       </Layout>
     </FormDataProvider>

@@ -20,13 +20,13 @@ const nextConfig = {
     domains: ['gxdhxigvkmntfgqtbpob.supabase.co'],
   },
   remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'gxdhxigvkmntfgqtbpob.supabase.co',
-        port: '',
-        pathname: '/storage/v1/object/public/images/**',
-      },
-    ],
+    {
+      protocol: 'https',
+      hostname: 'gxdhxigvkmntfgqtbpob.supabase.co',
+      port: '',
+      pathname: '/storage/v1/object/public/images/**',
+    },
+  ],
 };
 
 module.exports = nextConfig;
