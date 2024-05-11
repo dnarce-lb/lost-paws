@@ -237,8 +237,18 @@ const plusIcons = [
   },
 ];
 
-const FotosStep = ({ onNextStepAvailable }: { onNextStepAvailable: (params: boolean) => void }) => {
+const FotosStep = ({
+  onNextStepAvailable,
+  setFilesToUpload,
+}: {
+  onNextStepAvailable: (params: boolean) => void;
+  setFilesToUpload: (params: File[]) => void;
+}) => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+
+  useEffect(() => {
+    setFilesToUpload(selectedFiles);
+  }, [selectedFiles, setFilesToUpload]);
 
   const handleFileChange: React.ChangeEventHandler<HTMLInputElement> | undefined = e => {
     const files = Array.from(e.target.files as Iterable<File> | ArrayLike<File>);
@@ -382,27 +392,50 @@ const InformacionStep = () => {
 const getStepConfifg = ({
   onHideStepperLabels,
   onNextStepAvailable,
+  setFilesToUpload,
 }: {
   onHideStepperLabels?: (params: boolean) => void;
   onNextStepAvailable: (params: boolean) => void;
+  setFilesToUpload: (params: File[]) => void;
 }) => {
   return {
     [StepsEnum.UBICACION]: (
       <UbicacionStep onHideStepperLabels={onHideStepperLabels} onNextStepAvailable={onNextStepAvailable} />
     ),
-    [StepsEnum.FOTOS]: <FotosStep onNextStepAvailable={onNextStepAvailable} />,
+    [StepsEnum.FOTOS]: <FotosStep onNextStepAvailable={onNextStepAvailable} setFilesToUpload={setFilesToUpload} />,
     [StepsEnum.INFORMACION]: <InformacionStep />,
   };
 };
 
-const Form: React.FC = () => {
-  const [currentStep, setCurrentStep] = useState<Step>(steps[2]);
+const Form = ({
+  setShowSearchingForMatches,
+  setShowObtainPetDesc,
+}: {
+  setShowObtainPetDesc: (val: boolean) => void;
+  setShowSearchingForMatches: (val: boolean) => void;
+}) => {
+  const [currentStep, setCurrentStep] = useState<Step>(steps[1]);
+  const [filesToUpload, setFilesToUpload] = useState<File[]>([]);
+  const [uploadedImages, setUploadedImages] = useState<string[]>([]);
 
   const [showStepperLabels, setShowStepperLabels] = useState<boolean>(true);
 
   const [isNextStepAvailable, setIsNextStepAvailable] = useState<boolean>(false);
 
-  const handleNextStep = () => {
+  const handleNextStep = async () => {
+    if (currentStep.name === StepsEnum.FOTOS) {
+      setShowObtainPetDesc(true);
+      let results = [];
+      for (let i = 0; i < filesToUpload.length; i++) {
+        const formData = new FormData();
+        formData.append('file', filesToUpload[i]);
+        const result = await fetch('/api/images', { method: 'POST', body: formData });
+        const resultJson = await result.json();
+        results.push(resultJson);
+      }
+      setUploadedImages(results.map(result => result.publicURL));
+      setShowObtainPetDesc(false);
+    }
     const nextStep = steps.find(step => step.number === currentStep.number + 1);
 
     if (nextStep) {
@@ -415,9 +448,11 @@ const Form: React.FC = () => {
     <div className='flex flex-col gap-5'>
       {showStepperLabels && <StepperLabels currentStep={currentStep} />}
       {
-        getStepConfifg({ onHideStepperLabels: setShowStepperLabels, onNextStepAvailable: setIsNextStepAvailable })[
-          currentStep.name
-        ]
+        getStepConfifg({
+          onHideStepperLabels: setShowStepperLabels,
+          onNextStepAvailable: setIsNextStepAvailable,
+          setFilesToUpload: setFilesToUpload,
+        })[currentStep.name]
       }
       {isNextStepAvailable && (
         <button

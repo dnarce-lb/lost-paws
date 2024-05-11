@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     }
 
     const bucketName = 'images';
-    const filePath = `public/${file.name}`;
+    const filePath = `public/${new Date().getTime()}-${file.name}`;
 
     const { data, error } = await supabase.storage.from(bucketName).upload(filePath, file, {
       cacheControl: '3600',
