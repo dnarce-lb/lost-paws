@@ -15,7 +15,7 @@
     "commit": "git-cz"
   },
   "devDependencies": {
-    "turbo": "1.10.6"
+    "turbo": "1.10.10"
   },
   "engines": {
     "node": ">=14.0.0"
