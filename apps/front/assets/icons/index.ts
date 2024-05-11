@@ -6,3 +6,4 @@ export { default as CheckMark } from './check-mark.svg';
 export { default as Plus } from './plus.svg';
 export { default as Close } from './close-circle.svg';
 export { default as Pin } from './pin.svg';
+export { default as Calendar } from './video-add.svg';
