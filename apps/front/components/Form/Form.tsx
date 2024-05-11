@@ -6,8 +6,11 @@
 
 import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
-import { ArrowDown, ArrowLeft, CheckMark, Close, Plus, Pin } from '@/assets/icons';
+import DatePicker from 'react-datepicker';
+import { ArrowDown, ArrowLeft, CheckMark, Close, Plus, Pin, Calendar } from '@/assets/icons';
 import useLocation from '@/hooks/useLocation';
+
+import 'react-datepicker/dist/react-datepicker.css';
 
 enum StepsEnum {
   UBICACION = 'Ubicación',
@@ -363,6 +366,19 @@ const FotosStep = ({ onNextStepAvailable }: { onNextStepAvailable: (params: bool
   );
 };
 
+const InformacionStep = () => {
+  const [startDate, setStartDate] = useState<Date | null>(new Date());
+
+  return (
+    <DatePicker
+      className='bg-white text-mainBlack w-full rounded-full py-3 px-4'
+      selected={startDate}
+      onChange={date => setStartDate(date)}
+      wrapperClassName='w-full'
+    />
+  );
+};
+
 const getStepConfifg = ({
   onHideStepperLabels,
   onNextStepAvailable,
@@ -375,12 +391,12 @@ const getStepConfifg = ({
       <UbicacionStep onHideStepperLabels={onHideStepperLabels} onNextStepAvailable={onNextStepAvailable} />
     ),
     [StepsEnum.FOTOS]: <FotosStep onNextStepAvailable={onNextStepAvailable} />,
-    [StepsEnum.INFORMACION]: <div>Información</div>,
+    [StepsEnum.INFORMACION]: <InformacionStep />,
   };
 };
 
 const Form: React.FC = () => {
-  const [currentStep, setCurrentStep] = useState<Step>(steps[1]);
+  const [currentStep, setCurrentStep] = useState<Step>(steps[2]);
 
   const [showStepperLabels, setShowStepperLabels] = useState<boolean>(true);
 
