@@ -13,6 +13,7 @@ module.exports = {
       colors: {
         mainGray: 'rgb(228, 235, 240)',
         mainBlue: 'rgb(0, 161, 255)',
+        darkBlue: 'rgb(31, 42, 61)',
         mainBlack: 'rgb(17, 28, 45)',
       },
     },
