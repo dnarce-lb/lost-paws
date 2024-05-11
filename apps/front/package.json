@@ -18,14 +18,20 @@
     "@types/react-lottie": "^1.2.10",
     "common-tags": "^1.8.2",
     "eslint-config-custom": "*",
+    "leaflet": "^1.9.4",
+    "leaflet-control-geocoder": "^2.4.0",
+    "leaflet-defaulticon-compatibility": "^0.1.2",
+    "leaflet-geosearch": "^3.11.1",
     "next": "14.2.3",
     "next-secure-headers": "^2.2.0",
     "openai": "^4.44.0",
     "react": "^18",
     "react-dom": "^18",
-    "react-lottie": "^1.2.4"
+    "react-lottie": "^1.2.4",
+    "react-leaflet": "^4.2.1"
   },
   "devDependencies": {
+    "@types/leaflet": "^1.9.12",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
