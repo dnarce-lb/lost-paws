@@ -3,7 +3,7 @@ import supabase from '../utils/supabase/client';
 type ReportType = 'lost' | 'found';
 
 export interface Report {
-  id?: number;
+  id: number;
   pictureUrl1?: string;
   pictureUrl2?: string;
   pictureUrl3?: string;
@@ -42,7 +42,7 @@ export interface DatabaseSize {
 }
 
 export interface DatabaseReport {
-  id?: number;
+  id: number;
   picture_url1?: string;
   picture_url2?: string;
   picture_url3?: string;

@@ -48,7 +48,7 @@ const getPetComparisonResult = async (picturesPet1: string[], picturesPet2: stri
     throw new Error('No result');
   }
 
-  return result;
+  return result as 'HIGH' | 'MEDIUM' | 'LOW';
 };
 
 export default getPetComparisonResult;
