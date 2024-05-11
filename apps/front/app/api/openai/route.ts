@@ -1,13 +1,12 @@
-import getPetDescription from "@/app/services/ai-recognition/pet-description";
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
+import getPetDescription from '@/app/services/ai-recognition/pet-description';
 
 export async function POST(req: Request, res: Response) {
-    const body = await req.json();
-  
-    console.log(body);
+  const body = await req.json();
 
-   const description = await getPetDescription(body.images);
-  
-    return NextResponse.json({description}, { status: 200 });
-  }
-  
+  console.log(body);
+
+  const description = await getPetDescription(body.images);
+
+  return NextResponse.json({ description }, { status: 200 });
+}

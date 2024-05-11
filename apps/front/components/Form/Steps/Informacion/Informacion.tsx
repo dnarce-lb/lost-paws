@@ -72,7 +72,9 @@ const InformacionStep: React.FC<Props> = ({ context }) => {
             type='text'
             placeholder='Raza'
             value={formData.breed}
-            onChange={e => {handleChange('breed', e.target.value)}}
+            onChange={e => {
+              handleChange('breed', e.target.value);
+            }}
             className='bg-white border border-mainBlack/10 text-sm text-mainBlack/60 w-full rounded-full py-3 px-4 mt-2'
           />
         </div>
@@ -82,10 +84,7 @@ const InformacionStep: React.FC<Props> = ({ context }) => {
             options={['Pequeño', 'Mediano', 'Grande']}
             value={formData?.size}
             onChange={(newVal: string) => {
-              handleChange(
-                'size',
-                newVal
-              );
+              handleChange('size', newVal);
             }}
           />
         </div>
