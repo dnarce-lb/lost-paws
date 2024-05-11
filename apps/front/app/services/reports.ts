@@ -78,6 +78,7 @@ const transformToReport = (reportData: DatabaseReport): Report => {
     description: reportData.description,
     type: reportData.type,
     date: reportData.date,
+    name: reportData.name,
   };
 };
 

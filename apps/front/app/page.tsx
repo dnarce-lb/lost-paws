@@ -19,7 +19,7 @@ export default function Home() {
             Sabemos que el valor tu mascota no tiene precio, por eso, nuestro servicio es completamente <b>gratis</b>
           </span>
         </div>
-        <div className='mt-8 border-b pb-8'>
+        <div className='mt-8 border-b pb-8 flex flex-col items-center'>
           <Image src={TeamWork} width={267} alt='' />
         </div>
         <div className='mt-8'>

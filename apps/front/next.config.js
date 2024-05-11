@@ -16,6 +16,9 @@ const nextConfig = {
       },
     ];
   },
+  images: {
+    domains: ['gxdhxigvkmntfgqtbpob.supabase.co'],
+  }
 };
 
 module.exports = nextConfig;
