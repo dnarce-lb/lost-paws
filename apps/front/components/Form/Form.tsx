@@ -8,6 +8,7 @@
 
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { CheckMark } from '@/assets/icons';
 import UbicacionStep from './Steps/Ubicacion';
 
@@ -15,7 +16,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import FotosStep from './Steps/Fotos';
 import InformacionStep from './Steps/Informacion';
 import { useFormDataContext } from '@/hooks/useFormData';
-import ConfirmarStep from './Steps/Confirmar/Confirmar';
+import ConfirmarStep from './Steps/Confirmar';
 
 enum StepsEnum {
   UBICACION = 'Ubicación',
@@ -110,7 +111,11 @@ type Props = {
 
 const Form: React.FC<Props> = ({ setShowSearchingForMatches, setShowObtainPetDesc, type }) => {
   const [currentStep, setCurrentStep] = useState<Step>(steps[0]);
+  const [filesToUpload, setFilesToUpload] = useState<File[]>([]);
+  const [uploadedImages, setUploadedImages] = useState<string[]>([]);
   const context = useFormDataContext();
+
+  const router = useRouter();
 
   useEffect(() => {
     context.handleChange('type', type);
@@ -129,12 +134,17 @@ const Form: React.FC<Props> = ({ setShowSearchingForMatches, setShowObtainPetDes
     }
 
     if (currentStep.name === StepsEnum.CONFIRM) {
-      console.log('entro aqui confirm');
       setShowObtainPetDesc(true);
       const result = await context.submit();
-      console.log('🚀 ~ handleNextStep ~ result:', result);
-      // TO DO: HACER REDIRECT A LA VISTA DE RESULTADO
+
       setShowObtainPetDesc(false);
+
+      setShowSearchingForMatches(true);
+
+      // @ts-ignore
+      const { id } = result[0];
+
+      router.push(`/coincidencias/${id}`);
     }
 
     const nextStep = steps.find(step => step.number === currentStep.number + 1);
