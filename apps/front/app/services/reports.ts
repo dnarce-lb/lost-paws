@@ -10,10 +10,10 @@ export interface Report {
   lat?: number;
   lng?: number;
   formattedAddress?: string;
-  animal?: DatabaseAnimal;
-  gender?: DatabaseGender;
-  breed?: DatabaseBreed;
-  size?: DatabaseSize;
+  animal?: string;
+  gender?: string;
+  breed?: string;
+  size?: string;
   age?: string;
   color?: string;
   description?: string;
@@ -22,24 +22,6 @@ export interface Report {
   date?: Date;
 }
 
-export interface DatabaseAnimal {
-  id: number;
-  name: string;
-}
-
-export interface DatabaseGender {
-  id: number;
-  name: string;
-}
-
-export interface DatabaseBreed {
-  id: number;
-  name: string;
-}
-export interface DatabaseSize {
-  id: number;
-  name: string;
-}
 
 export interface DatabaseReport {
   id: number;
@@ -49,10 +31,10 @@ export interface DatabaseReport {
   lat?: number;
   lng?: number;
   formatted_address?: string;
-  animals?: DatabaseAnimal;
-  genders?: DatabaseGender;
-  breeds?: DatabaseBreed;
-  sizes?: DatabaseSize;
+  animals?: string;
+  genders?: string;
+  breeds?: string;
+  sizes?: string;
   age?: string;
   color?: string;
   description?: string;
@@ -93,10 +75,10 @@ export const createReport = async (report: Report) => {
         lat: report.lat,
         lng: report.lng,
         formatted_address: report.formattedAddress,
-        animal_id: report.animal?.id,
-        gender_id: report.gender?.id,
-        breed_id: report.breed?.id,
-        size_id: report.size?.id,
+        animal: report.animal,
+        gender: report.gender,
+        breed: report.breed,
+        size: report.size,
         age: report.age,
         description: report.description,
         name: report.name,
@@ -105,7 +87,7 @@ export const createReport = async (report: Report) => {
     ])
     .select();
 
-  if (error) throw new Error('Error on creating report');
+  if (error) {console.log(error); throw new Error('Error on creating report');}
 
   return data;
 };
@@ -120,10 +102,10 @@ export const updateReport = async (id: number, reportUpdate: Partial<Report>) =>
       lat: reportUpdate.lat,
       lng: reportUpdate.lng,
       formatted_address: reportUpdate.formattedAddress,
-      animal_id: reportUpdate.animal?.id,
-      gender_id: reportUpdate.gender?.id,
-      breed_id: reportUpdate.breed?.id,
-      size_id: reportUpdate.size?.id,
+      animal: reportUpdate?.animal,
+      gender: reportUpdate?.gender,
+      breed: reportUpdate?.breed,
+      size: reportUpdate?.size,
       age: reportUpdate.age,
       description: reportUpdate.description,
       name: reportUpdate.name,

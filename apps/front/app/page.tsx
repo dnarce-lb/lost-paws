@@ -5,11 +5,9 @@ import Image from 'next/image';
 import { FamiliesStats, Footer, HowItWorks, TeamWork } from '@/assets/images';
 import Header from '@/components/Header';
 import Layout from '@/components/Layout';
-import { FormDataProvider } from '@/hooks/useFormData';
 
 export default function Home() {
   return (
-    <FormDataProvider>
       <Layout>
         <Header />
         <div className='bg-white flex flex-col rounded-3xl py-12 px-8'>
@@ -43,6 +41,5 @@ export default function Home() {
         <Image src={HowItWorks} alt='How it works' />
         <Image src={Footer} alt='Footer' />
       </Layout>
-    </FormDataProvider>
   );
 }
