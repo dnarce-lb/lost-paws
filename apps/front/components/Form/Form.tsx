@@ -105,7 +105,7 @@ const Form: React.FC<Props> = ({ setShowSearchingForMatches, setShowObtainPetDes
     if (currentStep.name === StepsEnum.FOTOS) {
       setShowObtainPetDesc(true);
       const results = [];
-      for (let i = 0; i < filesToUpload.length; i++) {
+      for (let i = 0; i < filesToUpload.length; i += 1) {
         const formData = new FormData();
         formData.append('file', filesToUpload[i]);
         const result = await fetch('/api/images', { method: 'POST', body: formData });
