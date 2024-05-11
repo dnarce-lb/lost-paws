@@ -66,15 +66,21 @@ type Step = {
 
 const UbicacionStep = ({
   onHideStepperLabels,
-  onNextStep,
+  onNextStepAvailable,
 }: {
   onHideStepperLabels?: (params: boolean) => void;
-  onNextStep: () => void;
+  onNextStepAvailable: (params: boolean) => void;
 }) => {
   const [isShowingLocations, setisShowingLocations] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState('');
   const { getMyLocation, addreesses, setFormattedAddress, formattedAddress, loading, selectedPlace, selectPlace } =
     useLocation();
+
+  useEffect(() => {
+    if (selectedPlace !== null) {
+      onNextStepAvailable(true);
+    }
+  }, [onNextStepAvailable, selectedPlace]);
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
@@ -188,13 +194,13 @@ const UbicacionStep = ({
             addreesses.map(address => (
               <div
                 key={address.raw.place_id}
-                onClick={() =>
+                onClick={() => {
                   selectPlace({
                     formattedAddress: address.label,
                     lat: address.y,
                     lng: address.x,
-                  })
-                }
+                  });
+                }}
                 className='bg-white w-full z-10 gap-3 h-[57px] mt-6 border-b-[1px] border-mainGray flex flex-row justify-center items-start cursor-pointer'>
                 <Image src={Pin} width={24} height={24} alt='' />
                 <div className='flex flex-col justify-start items-start w-full overflow-hidden'>
@@ -206,13 +212,6 @@ const UbicacionStep = ({
               </div>
             ))}
         </div>
-        <button
-          type='button'
-          disabled={!selectedPlace}
-          className='bg-mainBlue text-white rounded-full h-12 w-full disabled:opacity-50'
-          onClick={onNextStep}>
-          Continuar
-        </button>
       </div>
     </div>
   );
@@ -235,7 +234,7 @@ const plusIcons = [
   },
 ];
 
-const FotosStep = () => {
+const FotosStep = ({ onNextStepAvailable }: { onNextStepAvailable: (params: boolean) => void }) => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
   const handleFileChange: React.ChangeEventHandler<HTMLInputElement> | undefined = e => {
@@ -271,6 +270,14 @@ const FotosStep = () => {
   };
 
   const areImagesSelected = selectedFiles.length > 0;
+
+  const isNextStepAvailable = selectedFiles.length === MAX_IMAGES_LIMIT;
+
+  useEffect(() => {
+    if (isNextStepAvailable) {
+      onNextStepAvailable(true);
+    }
+  }, [isNextStepAvailable, onNextStepAvailable]);
 
   return (
     <div className='bg-white text-mainBlack rounded-3xl p-8 flex flex-col'>
@@ -346,14 +353,16 @@ const FotosStep = () => {
 
 const getStepConfifg = ({
   onHideStepperLabels,
-  onNextStep,
+  onNextStepAvailable,
 }: {
   onHideStepperLabels?: (params: boolean) => void;
-  onNextStep: () => void;
+  onNextStepAvailable: (params: boolean) => void;
 }) => {
   return {
-    [StepsEnum.UBICACION]: <UbicacionStep onHideStepperLabels={onHideStepperLabels} onNextStep={onNextStep} />,
-    [StepsEnum.FOTOS]: <FotosStep />,
+    [StepsEnum.UBICACION]: (
+      <UbicacionStep onHideStepperLabels={onHideStepperLabels} onNextStepAvailable={onNextStepAvailable} />
+    ),
+    [StepsEnum.FOTOS]: <FotosStep onNextStepAvailable={onNextStepAvailable} />,
     [StepsEnum.INFORMACION]: <div>Información</div>,
   };
 };
@@ -363,18 +372,33 @@ const Form: React.FC = () => {
 
   const [showStepperLabels, setShowStepperLabels] = useState<boolean>(true);
 
+  const [isNextStepAvailable, setIsNextStepAvailable] = useState<boolean>(false);
+
   const handleNextStep = () => {
     const nextStep = steps.find(step => step.number === currentStep.number + 1);
 
     if (nextStep) {
       setCurrentStep(nextStep);
+      setIsNextStepAvailable(false);
     }
   };
 
   return (
     <div className='flex flex-col gap-5'>
       {showStepperLabels && <StepperLabels currentStep={currentStep} />}
-      {getStepConfifg({ onHideStepperLabels: setShowStepperLabels, onNextStep: handleNextStep })[currentStep.name]}
+      {
+        getStepConfifg({ onHideStepperLabels: setShowStepperLabels, onNextStepAvailable: setIsNextStepAvailable })[
+          currentStep.name
+        ]
+      }
+      {isNextStepAvailable && (
+        <button
+          type='button'
+          className='bg-mainBlue text-white rounded-full h-12 w-full disabled:opacity-50 '
+          onClick={handleNextStep}>
+          Continuar
+        </button>
+      )}
     </div>
   );
 };
