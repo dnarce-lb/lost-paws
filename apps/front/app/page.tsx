@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { TeamWork } from '@/assets/images';
+import { FamiliesStats, Footer, HowItWorks, TeamWork } from '@/assets/images';
 import Header from '@/components/Header';
 import Layout from '@/components/Layout';
 import { FormDataProvider } from '@/hooks/useFormData';
@@ -39,6 +39,9 @@ export default function Home() {
             </Link>
           </div>
         </div>
+        <Image src={FamiliesStats} alt='Stats' />
+        <Image src={HowItWorks} alt='How it works' />
+        <Image src={Footer} alt='Footer' />
       </Layout>
     </FormDataProvider>
   );
