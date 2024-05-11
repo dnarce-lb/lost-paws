@@ -26,7 +26,17 @@ const getPetDescription = async (pictures: string[]) => {
     throw new Error('No result');
   }
 
-  return result;
+  // perro,golden retriever,cachorro,mediano,dorado,macho
+  const [animal, breed, age, size, color, gender] = result.split(',').map(s => s || undefined);
+
+  return {
+    animal,
+    breed,
+    age,
+    size,
+    color,
+    gender,
+  };
 };
 
 export default getPetDescription;

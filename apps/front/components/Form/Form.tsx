@@ -125,6 +125,7 @@ const Form: React.FC<Props> = ({ setShowSearchingForMatches, setShowObtainPetDes
       console.log('entro aqui fotos');
       setShowObtainPetDesc(true);
       await context.uploadImages();
+      await context.processPetImages();
       setShowObtainPetDesc(false);
     }
 

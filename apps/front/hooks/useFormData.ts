@@ -11,6 +11,7 @@ import {
   ReportType,
   createReport,
 } from '@/app/services/reports';
+import getPetDescription from '@/app/services/ai-recognition/pet-description';
 
 export type FormData = {
   pictureUrl1?: string;
@@ -87,6 +88,16 @@ const useFormData = () => {
       ...formData,
       ...Object.assign({}, ...images),
     });
+    return images;
+  };
+
+  const processPetImages = async () => {
+    const images = [formData.pictureUrl1, formData.pictureUrl2, formData.pictureUrl3].filter(Boolean) as string[];
+    const details = await getPetDescription(images);
+    setFormData({
+      ...formData,
+      ...details,
+    });
   };
 
   return {
@@ -96,6 +107,7 @@ const useFormData = () => {
     submit,
     setFilesToUpload,
     uploadImages,
+    processPetImages,
   };
 };
 
