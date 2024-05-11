@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import { Field, Select } from '@headlessui/react';
 import clsx from 'clsx';
 import Image from 'next/image';
 import { ArrowDown } from '@/assets/icons';
 
-const SelectInput = React.forwardRef<HTMLSelectElement, { children: React.ReactNode | React.ReactNode[] }>(
+const SelectInput = React.forwardRef<HTMLSelectElement, { children: React.ReactNode | React.ReactNode[], onChange: React.ChangeEventHandler<HTMLSelectElement>  }>(
   (props, ref) => {
     return (
       <div className='flex flex-col gap-2'>

@@ -13,11 +13,14 @@ import UbicacionStep from './Steps/Ubicacion';
 import 'react-datepicker/dist/react-datepicker.css';
 import FotosStep from './Steps/Fotos';
 import InformacionStep from './Steps/Informacion';
+import { useFormDataContext } from '@/hooks/useFormData';
+import ConfirmarStep from './Steps/Confirmar/Confirmar';
 
 enum StepsEnum {
   UBICACION = 'Ubicación',
   FOTOS = 'Fotos',
   INFORMACION = 'Información',
+  CONFIRM = 'Confirmar',
 }
 
 const steps: Step[] = [
@@ -33,12 +36,16 @@ const steps: Step[] = [
     number: 3,
     name: StepsEnum.INFORMACION,
   },
+  {
+    number: 4,
+    name: StepsEnum.CONFIRM,
+  },
 ];
 
 const StepperLabels = ({ currentStep }: { currentStep: Step }) => {
   return (
     <div className='bg-white text-mainBlack flex items-center justify-between rounded-3xl p-8'>
-      {steps.map(step => {
+      {steps.filter(step => step.number < 4).map(step => {
         const { number, name } = step;
 
         const isCurrentStep = number === currentStep.number;
@@ -72,18 +79,19 @@ type Step = {
 const getStepConfifg = ({
   onHideStepperLabels,
   onNextStepAvailable,
-  setFilesToUpload,
+  context
 }: {
   onHideStepperLabels?: (params: boolean) => void;
   onNextStepAvailable: (params: boolean) => void;
-  setFilesToUpload: (params: File[]) => void;
+  context: any;
 }) => {
   return {
     [StepsEnum.UBICACION]: (
-      <UbicacionStep onHideStepperLabels={onHideStepperLabels} onNextStepAvailable={onNextStepAvailable} />
+      <UbicacionStep onHideStepperLabels={onHideStepperLabels} onNextStepAvailable={onNextStepAvailable} context={context} />
     ),
-    [StepsEnum.FOTOS]: <FotosStep onNextStepAvailable={onNextStepAvailable} setFilesToUpload={setFilesToUpload} />,
-    [StepsEnum.INFORMACION]: <InformacionStep />,
+    [StepsEnum.FOTOS]: <FotosStep onNextStepAvailable={onNextStepAvailable} context={context} />,
+    [StepsEnum.INFORMACION]: <InformacionStep context={context} />,
+    [StepsEnum.CONFIRM]: <ConfirmarStep context={context} />,
   };
 };
 
@@ -93,9 +101,8 @@ type Props = {
 };
 
 const Form: React.FC<Props> = ({ setShowSearchingForMatches, setShowObtainPetDesc }) => {
-  const [currentStep, setCurrentStep] = useState<Step>(steps[2]);
-  const [filesToUpload, setFilesToUpload] = useState<File[]>([]);
-  const [uploadedImages, setUploadedImages] = useState<string[]>([]);
+  const [currentStep, setCurrentStep] = useState<Step>(steps[0]);
+  const context = useFormDataContext();
 
   const [showStepperLabels, setShowStepperLabels] = useState<boolean>(true);
 
@@ -103,16 +110,18 @@ const Form: React.FC<Props> = ({ setShowSearchingForMatches, setShowObtainPetDes
 
   const handleNextStep = async () => {
     if (currentStep.name === StepsEnum.FOTOS) {
+      console.log('entro aqui fotos');
       setShowObtainPetDesc(true);
-      const results = [];
-      for (let i = 0; i < filesToUpload.length; i++) {
-        const formData = new FormData();
-        formData.append('file', filesToUpload[i]);
-        const result = await fetch('/api/images', { method: 'POST', body: formData });
-        const resultJson = await result.json();
-        results.push(resultJson);
-      }
-      setUploadedImages(results.map(result => result.publicURL));
+      await context.uploadImages();
+      setShowObtainPetDesc(false);
+    }
+    
+    if (currentStep.name === StepsEnum.CONFIRM) {
+      console.log('entro aqui confirm');
+      setShowObtainPetDesc(true);
+      const result = await context.submit();
+      console.log("🚀 ~ handleNextStep ~ result:", result);
+      //TO DO: HACER REDIRECT A LA VISTA DE RESULTADO
       setShowObtainPetDesc(false);
     }
 
@@ -120,8 +129,14 @@ const Form: React.FC<Props> = ({ setShowSearchingForMatches, setShowObtainPetDes
 
     if (nextStep) {
       setCurrentStep(nextStep);
-      setIsNextStepAvailable(false);
+      if (nextStep.number < 3) {
+        setIsNextStepAvailable(false);
+      }
+      if (nextStep.number < 4) {
+        setShowStepperLabels(true);
+      }
     }
+    console.log('🚀 ~ handleNextStep ~ formData', context.formData);
   };
 
   return (
@@ -131,7 +146,7 @@ const Form: React.FC<Props> = ({ setShowSearchingForMatches, setShowObtainPetDes
         getStepConfifg({
           onHideStepperLabels: setShowStepperLabels,
           onNextStepAvailable: setIsNextStepAvailable,
-          setFilesToUpload,
+          context: context
         })[currentStep.name]
       }
       {isNextStepAvailable && (

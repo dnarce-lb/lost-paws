@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect } from 'react';
 import { LatLng } from 'leaflet';
 import { OpenStreetMapProvider } from 'leaflet-geosearch';
@@ -57,6 +59,7 @@ const useLocation = () => {
       setFormattedAddress(place.formattedAddress);
     }
     setSelectedPlace(place);
+    setAddresses([]);
   };
 
   return {
