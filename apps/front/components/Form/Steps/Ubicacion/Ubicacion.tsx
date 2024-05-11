@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable react-hooks/exhaustive-deps */
 
 'use client';
 
@@ -15,7 +16,7 @@ type Props = {
 };
 
 const UbicacionStep: React.FC<Props> = ({ onHideStepperLabels, onNextStepAvailable, context }) => {
-  const { handleMultipleChange } = context;
+  const { handleMultipleChange, formData } = context;
   const [isShowingLocations, setisShowingLocations] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState('');
   const { getMyLocation, addreesses, setFormattedAddress, formattedAddress, loading, selectedPlace, selectPlace } =
@@ -61,7 +62,7 @@ const UbicacionStep: React.FC<Props> = ({ onHideStepperLabels, onNextStepAvailab
   return !isShowingLocations ? (
     <div className='bg-white text-mainBlack rounded-3xl p-8'>
       <div className='text-lg font-semibold flex gap-1'>
-        <div>Perdí a mi mascota</div>
+        <div>{formData.type === 'lost' ? 'Perdí a mi mascota' : 'Encontré una mascota'}</div>
         <Image src={ArrowDown} alt='' />
       </div>
       <div>
@@ -70,7 +71,9 @@ const UbicacionStep: React.FC<Props> = ({ onHideStepperLabels, onNextStepAvailab
         </div>
         <div className='mt-6 flex flex-col gap-2'>
           <div>
-            <span className='font-semibold'>Dónde lo perdiste?</span>
+            <span className='font-semibold'>
+              {formData.type === 'lost' ? 'Dónde lo perdiste?' : 'Dónde la encontraste?'}
+            </span>
           </div>
           <div>
             <button

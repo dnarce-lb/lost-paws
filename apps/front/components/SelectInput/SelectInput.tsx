@@ -17,7 +17,7 @@ const SelectInput = React.forwardRef<
             ref={ref}
             className={clsx(
               'bg-white border rounded-full py-3 px-4 text-mainBlack/60 w-full',
-              '\block w-full appearance-none border-color-mainBlack/10',
+              'block w-full appearance-none border-color-mainBlack/10',
               'focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25'
             )}>
             {props.children}

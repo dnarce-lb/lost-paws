@@ -1,14 +1,16 @@
 'use client';
+
 import constate from 'constate';
+import { useEffect, useState } from 'react';
 import {
   DatabaseAnimal,
   DatabaseBreed,
   DatabaseGender,
   DatabaseSize,
+  Report,
   ReportType,
   createReport,
 } from '@/app/services/reports';
-import { useEffect, useState } from 'react';
 
 export type FormData = {
   pictureUrl1?: string;
@@ -62,7 +64,7 @@ const useFormData = () => {
 
   const submit = async () => {
     try {
-      const response = await createReport(formData);
+      const response = await createReport(formData as Report);
       console.log('🚀 ~ submit ~ responseJson:', response);
       return response;
     } catch (error) {
@@ -71,8 +73,8 @@ const useFormData = () => {
   };
 
   const uploadImages = async () => {
-    let results = [];
-    for (let i = 0; i < filesToUpload.length; i++) {
+    const results = [];
+    for (let i = 0; i < filesToUpload.length; i += 1) {
       const formData = new FormData();
       formData.append('file', filesToUpload[i]);
       const result = await fetch('/api/images', { method: 'POST', body: formData });

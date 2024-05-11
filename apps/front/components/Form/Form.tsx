@@ -2,11 +2,12 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable react-hooks/exhaustive-deps */
 
 'use client';
 
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CheckMark } from '@/assets/icons';
 import UbicacionStep from './Steps/Ubicacion';
 
@@ -104,13 +105,18 @@ const getStepConfifg = ({
 type Props = {
   setShowSearchingForMatches: (val: boolean) => void;
   setShowObtainPetDesc: (val: boolean) => void;
+  type: string;
 };
 
-const Form: React.FC<Props> = ({ setShowSearchingForMatches, setShowObtainPetDesc }) => {
+const Form: React.FC<Props> = ({ setShowSearchingForMatches, setShowObtainPetDesc, type }) => {
   const [currentStep, setCurrentStep] = useState<Step>(steps[0]);
   const [filesToUpload, setFilesToUpload] = useState<File[]>([]);
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
   const context = useFormDataContext();
+
+  useEffect(() => {
+    context.handleChange('type', type);
+  }, [type]);
 
   const [showStepperLabels, setShowStepperLabels] = useState<boolean>(true);
 

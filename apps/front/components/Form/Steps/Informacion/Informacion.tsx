@@ -13,7 +13,7 @@ type Props = {
 
 const InformacionStep: React.FC<Props> = ({ context }) => {
   const [startDate, setStartDate] = useState<Date | null>(new Date());
-  const { handleChange } = context;
+  const { handleChange, formData } = context;
   const [petType, setPetType] = useState<'Perro' | 'Gato'>('Perro');
   const [petGender, setPetGender] = useState<string>('Macho');
   const [petSize, setPetSize] = useState<string>('Pequeño');
@@ -34,11 +34,13 @@ const InformacionStep: React.FC<Props> = ({ context }) => {
 
   return (
     <div className='bg-white text-mainBlack rounded-3xl px-7 py-8 flex flex-col'>
-      <div className='text-lg font-semibold'>Información de tu mascota</div>
+      <div className='text-lg font-semibold'>Información de la mascota</div>
       <div className='text-mainBlack/60 text-sm mt-1'>¡Ayudanos con información adicional!</div>
       <div className='mt-6 flex flex-col gap-6'>
         <div>
-          <div className='text-mainBlack text-sm font-semibold'>Fecha que se perdió</div>
+          <div className='text-mainBlack text-sm font-semibold'>
+            {formData.type === 'lost' ? 'Fecha que se perdió' : 'Fecha en que se encontró'}
+          </div>
           <DatePicker
             className='bg-white border border-mainBlack/10 text-sm text-mainBlack/60 w-full rounded-full py-3 px-4 mt-2'
             selected={startDate}

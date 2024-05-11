@@ -31,12 +31,12 @@ const plusIcons = [
 
 const FotosStep: React.FC<Props> = ({ onNextStepAvailable, context }) => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  const { setFilesToUpload } = context;
+  const { setFilesToUpload, formData } = context;
 
   useEffect(() => {
     console.log('🚀 ~ useEffect ~ selectedFiles', selectedFiles);
     setFilesToUpload(selectedFiles);
-  }, [selectedFiles]);
+  }, [selectedFiles, setFilesToUpload]);
 
   const handleFileChange: React.ChangeEventHandler<HTMLInputElement> | undefined = e => {
     const files = Array.from(e.target.files as Iterable<File> | ArrayLike<File>);
@@ -92,8 +92,10 @@ const FotosStep: React.FC<Props> = ({ onNextStepAvailable, context }) => {
       </div>
       <div className='text-mainBlack/60'>
         <div>
-          Subí fotos con buena luz y donde se pueda apreciar bien a tu mascota. ¡Nos va a ayudar a encontrarla más
-          rápido
+          Subí fotos con buena luz y donde se pueda apreciar bien a la mascota.{' '}
+          {formData.type === 'lost'
+            ? '¡Nos va a ayudar a encontrarla más rápido!'
+            : '¡Nos va a ayudar a encontrar a su familia más rápido!'}
         </div>
         <div className='mt-4'>Podés subir hasta {MAX_IMAGES_LIMIT} fotos.</div>
       </div>
