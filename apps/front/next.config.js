@@ -17,7 +17,9 @@ const nextConfig = {
     ];
   },
   images: {
-    remotePatterns: [
+    domains: ['gxdhxigvkmntfgqtbpob.supabase.co'],
+  },
+  remotePatterns: [
       {
         protocol: 'https',
         hostname: 'gxdhxigvkmntfgqtbpob.supabase.co',
@@ -25,7 +27,6 @@ const nextConfig = {
         pathname: '/storage/v1/object/public/images/**',
       },
     ],
-  },
 };
 
 module.exports = nextConfig;
