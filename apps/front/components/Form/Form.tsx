@@ -2,11 +2,12 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable react-hooks/exhaustive-deps */
 
 'use client';
 
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CheckMark } from '@/assets/icons';
 import UbicacionStep from './Steps/Ubicacion';
 
@@ -45,28 +46,30 @@ const steps: Step[] = [
 const StepperLabels = ({ currentStep }: { currentStep: Step }) => {
   return (
     <div className='bg-white text-mainBlack flex items-center justify-between rounded-3xl p-8'>
-      {steps.filter(step => step.number < 4).map(step => {
-        const { number, name } = step;
+      {steps
+        .filter(step => step.number < 4)
+        .map(step => {
+          const { number, name } = step;
 
-        const isCurrentStep = number === currentStep.number;
+          const isCurrentStep = number === currentStep.number;
 
-        const showSuccessIcon = number < currentStep.number;
+          const showSuccessIcon = number < currentStep.number;
 
-        const stepNumberClassName = 'rounded-full w-6 h-6 flex items-center justify-center'.concat(
-          isCurrentStep ? ' border-2 border-mainBlue' : ' border border-mainBlack/10'
-        );
+          const stepNumberClassName = 'rounded-full w-6 h-6 flex items-center justify-center'.concat(
+            isCurrentStep ? ' border-2 border-mainBlue' : ' border border-mainBlack/10'
+          );
 
-        const stepNameClassName = 'mt-3'.concat(
-          isCurrentStep || showSuccessIcon ? ' text-mainBlack' : ' text-mainBlack/60'
-        );
+          const stepNameClassName = 'mt-3'.concat(
+            isCurrentStep || showSuccessIcon ? ' text-mainBlack' : ' text-mainBlack/60'
+          );
 
-        return (
-          <div key={number} className='flex flex-col items-center'>
-            {showSuccessIcon ? <Image src={CheckMark} alt='' /> : <div className={stepNumberClassName}>{number}</div>}
-            <div className={stepNameClassName}>{name}</div>
-          </div>
-        );
-      })}
+          return (
+            <div key={number} className='flex flex-col items-center'>
+              {showSuccessIcon ? <Image src={CheckMark} alt='' /> : <div className={stepNumberClassName}>{number}</div>}
+              <div className={stepNameClassName}>{name}</div>
+            </div>
+          );
+        })}
     </div>
   );
 };
@@ -79,7 +82,7 @@ type Step = {
 const getStepConfifg = ({
   onHideStepperLabels,
   onNextStepAvailable,
-  context
+  context,
 }: {
   onHideStepperLabels?: (params: boolean) => void;
   onNextStepAvailable: (params: boolean) => void;
@@ -87,7 +90,11 @@ const getStepConfifg = ({
 }) => {
   return {
     [StepsEnum.UBICACION]: (
-      <UbicacionStep onHideStepperLabels={onHideStepperLabels} onNextStepAvailable={onNextStepAvailable} context={context} />
+      <UbicacionStep
+        onHideStepperLabels={onHideStepperLabels}
+        onNextStepAvailable={onNextStepAvailable}
+        context={context}
+      />
     ),
     [StepsEnum.FOTOS]: <FotosStep onNextStepAvailable={onNextStepAvailable} context={context} />,
     [StepsEnum.INFORMACION]: <InformacionStep context={context} />,
@@ -98,11 +105,16 @@ const getStepConfifg = ({
 type Props = {
   setShowSearchingForMatches: (val: boolean) => void;
   setShowObtainPetDesc: (val: boolean) => void;
+  type: string;
 };
 
-const Form: React.FC<Props> = ({ setShowSearchingForMatches, setShowObtainPetDesc }) => {
+const Form: React.FC<Props> = ({ setShowSearchingForMatches, setShowObtainPetDesc, type }) => {
   const [currentStep, setCurrentStep] = useState<Step>(steps[0]);
   const context = useFormDataContext();
+
+  useEffect(() => {
+    context.handleChange('type', type);
+  }, [type]);
 
   const [showStepperLabels, setShowStepperLabels] = useState<boolean>(true);
 
@@ -115,13 +127,13 @@ const Form: React.FC<Props> = ({ setShowSearchingForMatches, setShowObtainPetDes
       await context.uploadImages();
       setShowObtainPetDesc(false);
     }
-    
+
     if (currentStep.name === StepsEnum.CONFIRM) {
       console.log('entro aqui confirm');
       setShowObtainPetDesc(true);
       const result = await context.submit();
-      console.log("🚀 ~ handleNextStep ~ result:", result);
-      //TO DO: HACER REDIRECT A LA VISTA DE RESULTADO
+      console.log('🚀 ~ handleNextStep ~ result:', result);
+      // TO DO: HACER REDIRECT A LA VISTA DE RESULTADO
       setShowObtainPetDesc(false);
     }
 
@@ -146,7 +158,7 @@ const Form: React.FC<Props> = ({ setShowSearchingForMatches, setShowObtainPetDes
         getStepConfifg({
           onHideStepperLabels: setShowStepperLabels,
           onNextStepAvailable: setIsNextStepAvailable,
-          context: context
+          context,
         })[currentStep.name]
       }
       {isNextStepAvailable && (

@@ -1,5 +1,5 @@
-import { FormData, useFormDataContext } from '@/hooks/useFormData';
 import Image from 'next/image';
+import { FormData, useFormDataContext } from '@/hooks/useFormData';
 
 type Props = {
   context: {
@@ -8,9 +8,16 @@ type Props = {
   };
 };
 
+function formatDate(date: Date): string {
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const year = date.getFullYear();
+
+  return `${day}/${month}/${year}`;
+}
+
 const ConfirmarStep: React.FC<Props> = ({ context }) => {
   const { formData } = context;
-  console.log('🚀 ~ ConfirmarStep ~ formData:', formData);
   return (
     <div className='bg-white text-mainBlack rounded-3xl p-8 flex flex-col'>
       <div>
@@ -18,13 +25,17 @@ const ConfirmarStep: React.FC<Props> = ({ context }) => {
       </div>
       <div className='text-mainBlack/60'>
         <div>Revisá la información y confirmá para poder publicar la alerta en nuestra base.</div>
-        <span className='text-lg font-semibold'>Perdí a <span className=' text-mainBlue font-bold'>{formData.name ?? ''}</span></span>
+        {formData.type === 'lost' && (
+          <span className='text-lg font-semibold'>
+            Perdí a <span className=' text-mainBlue font-bold'>{formData.name ?? ''}</span>
+          </span>
+        )}
       </div>
 
       <div className='mt-6 flex gap-2 '>
         {[1, 2, 3].map(
           i =>
-            !!(formData[`pictureUrl${i}` as keyof typeof formData] as String | undefined) && (
+            !!(formData[`pictureUrl${i}` as keyof typeof formData] as string | undefined) && (
               <div key={`step4-picture-${i}`} className='relative'>
                 <Image
                   style={{
@@ -43,7 +54,7 @@ const ConfirmarStep: React.FC<Props> = ({ context }) => {
       </div>
       <div className='mt-6 flex flex-row items-center justify-between '>
         <div>Fecha:</div>
-        <div>{formData?.date?.toISOString() ?? ' - '}</div>
+        <div>{formData?.date ? formatDate(formData?.date) : ' - '}</div>
       </div>
       <div className='mt-6 flex flex-row items-center justify-between '>
         <div>Tipo:</div>

@@ -1,9 +1,8 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { LatLng } from 'leaflet';
 import { OpenStreetMapProvider } from 'leaflet-geosearch';
-import { useState } from 'react';
 
 export type RawResult = {
   lat: number;
@@ -38,7 +37,7 @@ const useLocation = () => {
   }, [formattedAddress]);
 
   const getMyLocation = async () => {
-    return await new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       if (navigator.geolocation) {
         setLoading(true);
         navigator.geolocation.getCurrentPosition(async position => {
