@@ -26,7 +26,16 @@ const getPetDescription = async (pictures: string[]) => {
     throw new Error('No result');
   }
 
-  return result;
+  const [animal, breed, age, size, color, gender] = result.split(',').map(s => s || undefined);
+
+  return {
+    animal,
+    breed,
+    age,
+    size,
+    color,
+    gender,
+  };
 };
 
 export default getPetDescription;

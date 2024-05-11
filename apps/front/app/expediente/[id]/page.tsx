@@ -31,14 +31,14 @@ export default async function Page({ params }: PageParams) {
           <Image alt='Pet' src={images[0]} layout='fill' objectFit='cover' className='rounded-2xl' />
         </div>
         <h1 className={`font-bold text-3xl ${titleColor}`}>
-          {report?.animal?.name} {status}
+          {report?.animal} {status}
         </h1>
         <section>
           <DataItem label='Lugar' data={report.formattedAddress} />
           <DataItem label='Fecha' data={report.date?.toLocaleDateString()} />
-          <DataItem label='Raza' data={report.breed?.name} />
-          <DataItem label='Género' data={report.gender?.name} />
-          <DataItem label='Tamaño' data={report.size?.name} />
+          <DataItem label='Raza' data={report.breed} />
+          <DataItem label='Género' data={report.gender} />
+          <DataItem label='Tamaño' data={report.size} />
           <DataItem label='Color' data={report.color} />
           <DataItem label='Edad' data={report.age} />
         </section>
