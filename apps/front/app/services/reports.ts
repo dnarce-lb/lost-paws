@@ -152,7 +152,7 @@ export const getReportById = async (id: number) => {
     .select('*, animals(id, name), genders(id, name), breeds(id, name), sizes(id, name)')
     .eq('id', id);
 
-  if (error) throw new Error('Error on fetching report');
+  if (error || !data) throw new Error('Error on fetching report');
 
-  return data ? transformToReport(data[0]) : null;
+  return transformToReport(data[0]);
 };
